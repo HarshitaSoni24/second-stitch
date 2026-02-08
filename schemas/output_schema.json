@@ -1,0 +1,12 @@
+{
+  "original_garment": "string",
+  "updated_design": {
+    "updated_style": "string",
+    "updated_length": "string",
+    "updated_fit": "string",
+    "updated_size": "string"
+  },
+  "design_notes": [
+    "string"
+  ]
+}
