@@ -10,6 +10,7 @@ import Processing from "./pages/Processing";
 import ThemeToggle from "./components/ThemeToggle";
 import AnimatedBackground from "./components/AnimatedBackground";
 
+
 /* Add to src/App.jsx or a new component */
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/result" element={<Result />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </AnimatePresence>
     </>

@@ -1,12 +1,34 @@
 import PageWrapper from "../components/PageWrapper";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import Card from "../components/ui/Card";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabaseClient";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 
 export default function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState(""); // ✅ added
   const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      // Since email confirm is off, the user is now logged in!
+      // Redirect straight to the landing page.
+      navigate("/"); 
+    }
+  }; // ✅ properly closed function
 
   return (
     <PageWrapper>
@@ -35,37 +57,88 @@ export default function Register() {
           className="relative z-20 w-full max-w-md"
         >
           <Card className="p-8">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }} className="text-center mb-6">
-              <h1 className="text-5xl font-bold text-amber-900">SECOND STITCH</h1>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.15 }}
+              className="text-center mb-6"
+            >
+              <h1 className="text-5xl font-bold text-amber-900">
+                SECOND STITCH
+              </h1>
             </motion.div>
 
-            <h2 className="text-2xl font-bold text-center text-amber-900 mb-2">Create Account</h2>
-            <p className="text-sm text-amber-800 text-center mb-6">AI Powered Sustainable Wardrobe</p>
+            <h2 className="text-2xl font-bold text-center text-amber-900 mb-2">
+              Create Account
+            </h2>
+            <p className="text-sm text-amber-800 text-center mb-6">
+              AI Powered Sustainable Wardrobe
+            </p>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-4">
-              <label className="text-sm font-semibold text-amber-900 mb-2 block">Full Name</label>
-              <Input placeholder="Your name" type="text" />
-            </motion.div>
+            <form onSubmit={handleRegister}>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-4">
-              <label className="text-sm font-semibold text-amber-900 mb-2 block">Email</label>
-              <Input placeholder="you@email.com" type="email" />
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="mb-4"
+              >
+                <label className="text-sm font-semibold text-amber-900 mb-2 block">
+                  Full Name
+                </label>
+                <Input
+                  placeholder="Your name"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mb-6">
-              <label className="text-sm font-semibold text-amber-900 mb-2 block">Password</label>
-              <Input placeholder="Create a strong password" type="password" />
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mb-4"
+              >
+                <label className="text-sm font-semibold text-amber-900 mb-2 block">
+                  Email
+                </label>
+                <Input
+                  placeholder="you@email.com"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </motion.div>
 
-           {/* Register.jsx - Update the button line */}
-<div>
-  <button 
-    type="submit" 
-    className="btn-primary-auth rounded-xl font-black shadow-2xl hover:brightness-125 transition-all"
-  >
-    Create Account
-  </button>
-</div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+                className="mb-6"
+              >
+                <label className="text-sm font-semibold text-amber-900 mb-2 block">
+                  Password
+                </label>
+                <Input
+                  placeholder="Create a strong password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </motion.div>
+
+              <div>
+                <button
+                  type="submit"
+                  className="btn-primary-auth rounded-xl font-black shadow-2xl hover:brightness-125 transition-all"
+                >
+                  Create Account
+                </button>
+              </div>
+
+            </form>
 
             <div className="flex items-center gap-4 my-6">
               <div className="flex-1 h-px bg-amber-300/40"></div>
@@ -74,10 +147,18 @@ export default function Register() {
             </div>
 
             <div className="text-center">
-              <p className="text-sm text-amber-900">Already have an account?{" "}
-                <motion.span whileHover={{ scale: 1.03 }} onClick={() => navigate('/login')} className="font-semibold text-orange-700 cursor-pointer">Log in</motion.span>
+              <p className="text-sm text-amber-900">
+                Already have an account?{" "}
+                <motion.span
+                  whileHover={{ scale: 1.03 }}
+                  onClick={() => navigate("/login")}
+                  className="font-semibold text-orange-700 cursor-pointer"
+                >
+                  Log in
+                </motion.span>
               </p>
             </div>
+
           </Card>
         </motion.div>
       </div>
