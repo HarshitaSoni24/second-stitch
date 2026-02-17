@@ -7,31 +7,14 @@ import Register from "./pages/Register";
 import Upload from "./pages/Upload";
 import Result from "./pages/Result";
 import Processing from "./pages/Processing";
-import ThemeToggle from "./components/ThemeToggle";
+import Dashboard from "./pages/Dashboard";
+import History from "./pages/History";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
 import AnimatedBackground from "./components/AnimatedBackground";
-
-
-/* Add to src/App.jsx or a new component */
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-
-export const CustomCursor = () => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
-
-  return (
-    <motion.div
-      className="fixed top-0 left-0 w-8 h-8 border-2 border-[#E67E22] rounded-full pointer-events-none z-[999] hidden md:block"
-      animate={{ x: mousePos.x - 16, y: mousePos.y - 16 }}
-      transition={{ type: "spring", damping: 25, stiffness: 250, mass: 0.5 }}
-    />
-  );
-};
+import AppLayout from "./components/AppLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   const location = useLocation();
@@ -39,16 +22,53 @@ export default function App() {
   return (
     <>
       <AnimatedBackground />
-      <ThemeToggle />
+
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Landing />} />
-          <Route path="/processing" element={<Processing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/result" element={<Result />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* ALL pages share Navbar */}
+          <Route element={<AppLayout />}>
+
+            {/* Public */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/processing" element={<Processing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+
+            {/* Protected */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+<Route path="/upload" element={<Upload />} />
+
+
+            <Route
+              path="/result"
+              element={
+                <ProtectedRoute>
+                  <Result />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              }
+            />
+
+          </Route>
         </Routes>
       </AnimatePresence>
     </>

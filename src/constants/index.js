@@ -15,6 +15,7 @@ export const ROUTES = {
   UPLOAD: "/upload",
   PROCESSING: "/processing",
   RESULT: "/result",
+  DASHBOARD: "/dashboard",
 };
 
 export const THEME = {

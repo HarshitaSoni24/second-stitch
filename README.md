@@ -1,16 +1,106 @@
-# React + Vite
+# Second Stitch - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A sustainable fashion web application built with React, Vite, and Tailwind CSS. This project enables users to upload clothing images for sustainable redesign analysis.
 
-Currently, two official plugins are available:
+## 🚀 Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```
+bash
+# Install dependencies
+npm install
 
-## React Compiler
+# Start development server
+npm run dev
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Build for production
+npm run build
 
-## Expanding the ESLint configuration
+# Preview production build
+npm run preview
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📁 Project Structure
+
+```
+frontend/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable UI components
+│   │   └── ui/         # Base UI components (Button, Card, Input, etc.)
+│   ├── pages/          # Route pages
+│   ├── constants/      # App constants and configuration
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Third-party library configurations
+│   ├── utils/          # Utility functions
+│   ├── App.jsx         # Main application component
+│   ├── main.jsx        # Application entry point
+│   └── index.css       # Global styles
+├── index.html          # HTML entry point
+├── package.json        # Dependencies and scripts
+├── vite.config.js      # Vite configuration
+├── tailwind.config.js  # Tailwind CSS configuration
+└── eslint.config.js    # ESLint configuration
+```
+
+## 🛠️ Tech Stack
+
+- **Framework:** React 19
+- **Build Tool:** Vite 7
+- **Routing:** React Router DOM 7
+- **Styling:** Tailwind CSS 3
+- **Animations:** Framer Motion 12
+- **Backend:** Supabase
+- **Image Processing:** HTML2Canvas
+
+## 📝 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build |
+
+## 🔗 Routes
+
+| Path | Page | Description |
+|------|------|-------------|
+| `/` | Landing | Home/Welcome page |
+| `/login` | Login | User login page |
+| `/register` | Register | User registration page |
+| `/upload` | Upload | Image upload page |
+| `/processing` | Processing | Processing animation page |
+| `/result` | Result | Results display page |
+| `/dashboard` | Dashboard | User dashboard |
+
+## 📦 Dependencies
+
+### Production
+- `@supabase/supabase-js` - Supabase client
+- `framer-motion` - Animations
+- `html2canvas` - Image processing
+- `react` - UI library
+- `react-dom` - React DOM
+- `react-router-dom` - Routing
+
+### Development
+- `@vitejs/plugin-react` - Vite React plugin
+- `autoprefixer` - CSS processing
+- `eslint` - Linting
+- `postcss` - CSS processing
+- `tailwindcss` - Utility CSS
+- `vite` - Build tool
+
+## 🎨 Features
+
+- User authentication (Login/Register)
+- Image upload functionality
+- Processing animation with progress steps
+- Custom cursor animation
+- Animated backgrounds
+- Theme toggle (light/dark)
+- Responsive design
+
+## 📄 License
+
+Private - All rights reserved
