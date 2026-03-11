@@ -1,23 +1,24 @@
 import { useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
+export default function ResetPassword() {
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleReset = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+    const { error } = await supabase.auth.updateUser({
+      password: password,
     });
 
     if (error) {
-      setMessage("Something went wrong.");
+      setMessage("Failed to update password.");
     } else {
-      setMessage("Password reset email sent. Check your inbox.");
+      setMessage("Password updated successfully!");
+      setTimeout(() => navigate("/login"), 2000);
     }
   };
 
@@ -25,21 +26,21 @@ export default function ForgotPassword() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-rose-100 to-pink-200">
       <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold text-rose-700 mb-6">
-          Reset Password
+          Set New Password
         </h2>
 
-        <form onSubmit={handleReset}>
+        <form onSubmit={handleUpdate}>
           <input
-            type="email"
-            placeholder="Enter your email"
+            type="password"
+            placeholder="New password"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3 border rounded-xl mb-4"
           />
 
           <button className="w-full bg-rose-600 text-white p-3 rounded-xl">
-            Send Reset Email
+            Update Password
           </button>
         </form>
 
@@ -48,13 +49,6 @@ export default function ForgotPassword() {
             {message}
           </p>
         )}
-
-        <p
-          onClick={() => navigate("/login")}
-          className="text-sm text-center mt-6 cursor-pointer hover:underline"
-        >
-          Back to Login
-        </p>
       </div>
     </div>
   );

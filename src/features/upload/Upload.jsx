@@ -1,54 +1,59 @@
-import { useRef, useState } from "react";
-import PageWrapper from "../components/PageWrapper";
+import { useRef, useState, useEffect } from "react";
+import PageWrapper from "../../components/PageWrapper";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
-import Card from "../components/ui/Card";
-import Input from "../components/ui/Input";
+import Button from "../../components/ui/Button";
+import Card from "../../components/ui/Card";
+import Input from "../../components/ui/Input";
+import { supabase } from "../../lib/supabaseClient";
 
 export default function Upload() {
   const [preview, setPreview] = useState(null);
   const [usingCamera, setUsingCamera] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [showNewProjectInput, setShowNewProjectInput] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
 
-// 1. Update startCamera to handle the ref more safely
-async function startCamera() {
-  setUsingCamera(true); // Switch UI first
-  
-  // Use a small timeout or useEffect to ensure the video element is in the DOM
-  setTimeout(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { 
-          facingMode: "environment",
-          width: { ideal: 1280 },
-          height: { ideal: 720 } 
-        },
-      });
-      
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        // Explicitly play after setting srcObject
-        await videoRef.current.play();
-      }
-    } catch (err) {
-      console.error("Camera Error:", err);
-      alert("Camera access denied or not available");
-      setUsingCamera(false);
-    }
-  }, 100); 
-}
+  useEffect(() => {
+    const fetchProjects = async () => {
+      // In a real app, you would fetch projects for the current user from Supabase.
+      // Example:
+      // const { data: fetchedProjects, error } = await supabase.from('projects').select('*').eq('user_id', user.id);
+      // if (!error) setProjects(fetchedProjects);
+      // For now, setting an empty array as mock data is removed
+      setProjects([]);
+    };
+    fetchProjects();
+  }, []);
 
-// 2. Ensure the Video element looks like this in your JSX:
-<video 
-  ref={videoRef} 
-  autoPlay 
-  playsInline 
-  muted 
-  className="w-full h-64 md:w-80 md:h-60 object-cover rounded-xl bg-black" 
-/>
+  async function startCamera() {
+    setUsingCamera(true);
+    
+    setTimeout(async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { 
+            facingMode: "environment",
+            width: { ideal: 1280 },
+            height: { ideal: 720 } 
+          },
+        });
+        
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          await videoRef.current.play();
+        }
+      } catch (err) {
+        console.error("Camera Error:", err);
+        alert("Camera access denied or not available");
+        setUsingCamera(false);
+      }
+    }, 100); 
+  }
 
   function capturePhoto() {
     const video = videoRef.current;
@@ -72,9 +77,57 @@ async function startCamera() {
     setPreview(URL.createObjectURL(file));
   }
 
+  const handleProjectChange = (e) => {
+    const value = e.target.value;
+    if (value === "create_new") {
+      setShowNewProjectInput(true);
+      setSelectedProjectId(null); // No project selected yet, pending creation
+    } else {
+      setShowNewProjectInput(false);
+      setSelectedProjectId(value === "none" ? null : parseInt(value));
+    }
+  };
+
   function handleUpcycle() {
     if (!preview) return;
-    try { sessionStorage.setItem("uploadedImage", preview); } catch (e) { /* ignore */ }
+
+    let finalProjectId = selectedProjectId;
+
+    if (showNewProjectInput && newProjectName.trim()) {
+      // Mock project creation - in a real app, this would be a Supabase insert
+      // Example:
+      // const { data, error } = await supabase.from('projects').insert([{ name: newProjectName.trim(), user_id: currentUser.id }]);
+      // if (!error && data) {
+      //   finalProjectId = data[0].id;
+      //   setProjects(prev => [...prev, data[0]]);
+      // } else {
+      //   console.error("Error creating project:", error);
+      //   alert("Failed to create new project.");
+      //   return;
+      // }
+
+      // For now, optimistically add to local state with a temporary ID
+      const newId = Date.now(); // Generate a temporary ID
+      const newProject = { id: newId, name: newProjectName.trim(), user_id: "123" };
+      setProjects(prev => [...prev, newProject]); // Optimistically add to local state
+      finalProjectId = newId;
+
+    } else if (showNewProjectInput && !newProjectName.trim()) {
+      alert("Please enter a name for the new project.");
+      return;
+    }
+
+    try { 
+      sessionStorage.setItem("uploadedImage", preview); 
+      if (finalProjectId) {
+        sessionStorage.setItem("assignedProjectId", finalProjectId);
+      } else {
+        sessionStorage.removeItem("assignedProjectId");
+      }
+    } catch (e) { 
+      console.error("Session storage error:", e);
+      // Handle error gracefully, e.g., alert user
+    }
     navigate("/processing");
   }
 
@@ -133,7 +186,7 @@ async function startCamera() {
         </motion.svg>
 
         {/* CONTENT AREA */}
-        <div className="relative z-10">
+        <div className="relative z-10 max-w-xl w-full">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -146,7 +199,7 @@ async function startCamera() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-amber-800 mb-10 text-center max-w-lg"
+            className="text-lg text-amber-800 mb-10 text-center max-w-lg mx-auto"
           >
             AI Powered Sustainable Wardrobe
           </motion.p>
@@ -178,7 +231,37 @@ async function startCamera() {
             </motion.label>
           )}
 
-          <div className="flex gap-4 mt-8">
+          {/* Project Selection */}
+          <div className="mt-8 mb-6">
+            <label htmlFor="project-select" className="block text-sm font-medium text-amber-900 mb-2">
+              Assign to Project
+            </label>
+            <select
+              id="project-select"
+              className="w-full p-3 border border-orange-200 rounded-lg bg-white/60 dark:bg-gray-800/60 text-amber-900 dark:text-white/80 focus:ring-amber-500 focus:border-amber-500"
+              onChange={handleProjectChange}
+              value={selectedProjectId || (showNewProjectInput ? "create_new" : "none")}
+            >
+              <option value="none">None (Uncategorized)</option>
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+              <option value="create_new">Create New Project...</option>
+            </select>
+            {showNewProjectInput && (
+              <Input
+                type="text"
+                placeholder="Enter new project name"
+                value={newProjectName}
+                onChange={(e) => setNewProjectName(e.target.value)}
+                className="mt-3 w-full"
+              />
+            )}
+          </div>
+
+          <div className="flex gap-4 mt-8 justify-center">
             {!usingCamera && (
                 <button onClick={startCamera} className="btn-ghost px-6 py-3 rounded-full border border-amber-600/40 hover:border-amber-600/60 text-amber-900 transition font-semibold">
                   Use Camera

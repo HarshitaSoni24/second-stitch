@@ -1,20 +1,22 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
-import Landing from "./pages/Landing";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Upload from "./pages/Upload";
-import Result from "./pages/Result";
-import Processing from "./pages/Processing";
-import Dashboard from "./pages/Dashboard";
-import History from "./pages/History";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import Landing from "./features/home/Landing";
+import Login from "./features/auth/Login";
+import Register from "./features/auth/Register";
+import Upload from "./features/upload/Upload";
+import Result from "./features/upload/Result";
+import Processing from "./features/upload/Processing";
+import Dashboard from "./features/dashboard/Dashboard";
+import History from "./features/history/History";
+import Profile from "./features/profile/Profile";
+import ForgotPassword from "./features/auth/ForgotPassword";
+import ResetPassword from "./features/auth/ResetPassword";
+import Favorites from "./features/favorites/Favorites";
 
 import AnimatedBackground from "./components/AnimatedBackground";
-import AppLayout from "./components/AppLayout";
-import ProtectedRoute from "./components/ProtectedRoute";
+import AppLayout from "./components/layout/AppLayout";
+import ProtectedRoute from "./components/layout/ProtectedRoute";
 
 export default function App() {
   const location = useLocation();
@@ -47,17 +49,27 @@ export default function App() {
               }
             />
 
-<Route path="/upload" element={<Upload />} />
-
-
             <Route
-              path="/result"
+              path="/profile"
               element={
                 <ProtectedRoute>
-                  <Result />
+                  <Profile />
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/favorites"
+              element={
+                <ProtectedRoute>
+                  <Favorites />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/result" element={<Result />} />
+
 
             <Route
               path="/history"

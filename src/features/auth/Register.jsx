@@ -1,11 +1,11 @@
-import PageWrapper from "../components/PageWrapper";
+import PageWrapper from "../../components/PageWrapper";
 import { motion } from "framer-motion";
-import Card from "../components/ui/Card";
+import Card from "../../components/ui/Card";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabaseClient";
-import Input from "../components/ui/Input";
-import Button from "../components/ui/Button";
+import { supabase } from "../../lib/supabaseClient";
+import Input from "../../components/ui/Input";
+import Button from "../../components/ui/Button";
 
 export default function Register() {
   const [email, setEmail] = useState("");

@@ -1,10 +1,10 @@
-import PageWrapper from "../components/PageWrapper";
+import PageWrapper from "../../components/PageWrapper";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Card from "../components/ui/Card";
-import Input from "../components/ui/Input";
-import { supabase } from "../lib/supabaseClient";
+import Card from "../../components/ui/Card";
+import Input from "../../components/ui/Input";
+import { supabase } from "../../lib/supabaseClient";
 
 
 export default function Login() {

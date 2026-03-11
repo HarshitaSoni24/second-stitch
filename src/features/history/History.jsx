@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabaseClient";
-import PageWrapper from "../components/PageWrapper";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
+import { supabase } from "../../lib/supabaseClient";
+import PageWrapper from "../../components/PageWrapper";
+import Card from "../../components/ui/Card";
+import Button from "../../components/ui/Button";
 import { motion } from "framer-motion";
 
 export default function History() {

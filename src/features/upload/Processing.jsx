@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import PageWrapper from "../components/PageWrapper";
-import Card from "../components/ui/Card";
+import PageWrapper from "../../components/PageWrapper";
+import Card from "../../components/ui/Card";
 
 const steps = [
   "Analyzing fabric texture",
@@ -17,6 +17,20 @@ export default function Processing() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
+    const uploadedImage = sessionStorage.getItem("uploadedImage");
+    const assignedProjectId = sessionStorage.getItem("assignedProjectId");
+
+    if (!uploadedImage) {
+      navigate("/upload"); // Redirect if no image is found
+      return;
+    }
+
+    // In a real application, you would send `uploadedImage` and `assignedProjectId`
+    // to your backend for AI processing. The AI's result would then be
+    // associated with this `assignedProjectId` in your database.
+    console.log("Processing image for project ID:", assignedProjectId);
+
+
     const interval = setInterval(() => {
       setStep((prev) => (prev + 1) % steps.length);
     }, 1200);

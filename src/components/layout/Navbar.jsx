@@ -3,6 +3,7 @@ import { supabase } from "../../lib/supabaseClient";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useTheme from "../../hooks/useTheme";
+import { Heart } from "lucide-react";
 
 export default function Navbar({ user }) {
   const navigate = useNavigate();
@@ -86,6 +87,27 @@ export default function Navbar({ user }) {
                   className="w-full text-left px-5 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                 >
                   Dashboard
+                </button>
+
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/profile");
+                  }}
+                  className="w-full text-left px-5 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                >
+                  Profile
+                </button>
+
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/favorites");
+                  }}
+                  className="w-full text-left px-5 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center gap-2"
+                >
+                  <Heart size={16} />
+                  Saved Designs
                 </button>
 
                 {/* 🌙 DARK MODE TOGGLE */}

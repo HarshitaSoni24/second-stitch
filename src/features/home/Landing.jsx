@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import PageWrapper from "../components/PageWrapper";
-import { CountUpTicker, CircularJourney } from "../components/SustainabilityElements";
+import PageWrapper from "../../components/PageWrapper";
+import { CountUpTicker, CircularJourney } from "../../components/SustainabilityElements";
 import { useRef } from "react";
+import { Leaf, Recycle, Sparkles, Scan } from "lucide-react";
 
 // Header Component with restored size
 const Navbar = () => {
@@ -165,7 +166,9 @@ export default function Landing() {
 <section className="py-16 px-6 max-w-7xl mx-auto">
   <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center mb-16">
     <div className="feature-card h-full flex flex-col justify-center">
-      <div className="text-4xl mb-4">♻️</div>
+      <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center mb-4">
+        <Recycle className="w-7 h-7 text-emerald-600" />
+      </div>
       <h3 className="text-2xl font-bold mb-3 text-amber-950">Circular Fashion</h3>
       <p className="text-amber-950/60 leading-relaxed text-sm">
         Reducing landfill waste by breathing new life into forgotten fabrics.
@@ -175,11 +178,13 @@ export default function Landing() {
     <CountUpTicker 
       value={1200} 
       label="Garments saved this month" 
-      icon="🌿" 
+      icon={<Leaf className="w-12 h-12 text-emerald-600" />}
     />
 
     <div className="feature-card h-full flex flex-col justify-center">
-      <div className="text-4xl mb-4">✨</div>
+      <div className="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center mb-4">
+        <Sparkles className="w-7 h-7 text-purple-600" />
+      </div>
       <h3 className="text-2xl font-bold mb-3 text-amber-950">AI Redesign</h3>
       <p className="text-amber-950/60 leading-relaxed text-sm">
         Neural networks generating unique, trend-aware upcycling blueprints.

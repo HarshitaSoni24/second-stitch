@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./ui/Navbar";
+import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../../lib/supabaseClient";
 
 export default function AppLayout() {
   const [user, setUser] = useState(null);
